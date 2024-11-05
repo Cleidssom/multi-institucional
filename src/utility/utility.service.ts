@@ -1,26 +1,38 @@
 import { Injectable } from '@nestjs/common';
+import { PrismaService } from 'src/prisma/prisma.service';
 import { CreateUtilityDto } from './dto/create-utility.dto';
 import { UpdateUtilityDto } from './dto/update-utility.dto';
 
 @Injectable()
 export class UtilityService {
-  create(createUtilityDto: CreateUtilityDto) {
-    return 'This action adds a new utility';
+  constructor(private prisma: PrismaService) {}
+
+  async create(createUtilityDto: CreateUtilityDto) {
+    return this.prisma.utility.create({
+      data: createUtilityDto,
+    });
   }
 
-  findAll() {
-    return `This action returns all utility`;
+  async findAll() {
+    return this.prisma.utility.findMany();
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} utility`;
+  async findOne(id: string) {
+    return this.prisma.utility.findUnique({
+      where: { id },
+    });
   }
 
-  update(id: number, updateUtilityDto: UpdateUtilityDto) {
-    return `This action updates a #${id} utility`;
+  async update(id: string, updateUtilityDto: UpdateUtilityDto) {
+    return this.prisma.utility.update({
+      where: { id },
+      data: updateUtilityDto,
+    });
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} utility`;
+  async remove(id: string) {
+    return this.prisma.utility.delete({
+      where: { id },
+    });
   }
 }
